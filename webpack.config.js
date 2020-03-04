@@ -1,16 +1,34 @@
+const webpack = require('webpack');
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const isDevServer = process.env.WEBPACK_DEV_SERVER;
 
 module.exports = {
-    entry: './src/index.js',
+    mode: 'production',
+    entry: {
+        app: './src/index.ts'
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
     },
-    plugins: [],
+    devServer: {
+        hot: true,
+    },
+    devtool: 'source-map',
+    plugins: [
+        ...!isDevServer ? [] : [
+            new HtmlWebpackPlugin({
+                template: path.resolve(__dirname, './src/index.html'),
+            }),
+            new webpack.HotModuleReplacementPlugin(),
+        ]
+    ],
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.(js|ts)$/,
                 exclude: /node_modules/,
                 use: [{
                     loader: 'cache-loader',
@@ -19,10 +37,14 @@ module.exports = {
                     options: {
                         presets: [
                             '@babel/preset-env',
+                            '@babel/preset-typescript'
                         ],
                     }
                 }]
             }
         ]
     },
+    resolve: {
+        extensions:  ['.js', '.ts'],
+    }
 };
