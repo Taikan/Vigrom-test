@@ -60,7 +60,7 @@ export class Router {
 
         if (MatchRoute && match) {
             const page = new MatchRoute({ location, match });
-            page.mount(this.root);
+            page.renderToDom(this.root);
         }
     }
 }
