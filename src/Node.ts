@@ -1,89 +1,103 @@
-import {ComponentConstructor} from "./Component";
-import {ElementDeclaration, DeclarationNode, DeclarationNodeArray, INode} from "./types";
+import { ComponentConstructor } from "./Component";
+import {
+  ElementDeclaration,
+  DeclarationNode,
+  DeclarationNodeArray,
+  INode
+} from "./types";
 
 class PrimitiveNode implements INode {
-    protected text: string;
+  protected text: string;
 
-    constructor(text: string|number) {
-        this.text = String(text);
-    }
+  constructor(text: string | number) {
+    this.text = String(text);
+  }
 
-    mount() {
-        return document.createTextNode(this.text);
-    }
+  mount() {
+    return document.createTextNode(this.text);
+  }
 }
 
 const isEvent = name => name.startsWith("on");
 const isAttribute = name => !isEvent(name) && name != "children";
 
 class DomNode implements INode {
-    constructor(protected element: ElementDeclaration<any, string>) {}
+  constructor(protected element: ElementDeclaration<any, string>) {}
 
-    mount() {
-        const { type, props } = this.element;
+  mount() {
+    const { type, props } = this.element;
 
-        const dom = document.createElement(type);
+    const dom = document.createElement(type);
 
-        Object.keys(props).filter(isAttribute).forEach(name => {
-            const value = props[name];
-            if (value != null && value !== false) {
-                // тут явно не все ситуации обрабатываются, но пока сойдет
-                if (name === 'className') {
-                    dom.setAttribute('class', value);
-                } else {
-                    dom[name] = value;
-                }
-            }
-        });
+    Object.keys(props)
+      .filter(isAttribute)
+      .forEach(name => {
+        const value = props[name];
+        if (value != null && value !== false) {
+          // тут явно не все ситуации обрабатываются, но пока сойдет
+          if (name === "className") {
+            dom.setAttribute("class", value);
+          } else {
+            dom[name] = value;
+          }
+        }
+      });
 
-        Object.keys(props).filter(isEvent).forEach(name => {
-            const eventType = name.toLowerCase().substring(2);
-            dom.addEventListener(eventType, props[name]);
-        });
+    Object.keys(props)
+      .filter(isEvent)
+      .forEach(name => {
+        const eventType = name.toLowerCase().substring(2);
+        dom.addEventListener(eventType, props[name]);
+      });
 
-        const childElements = props.children || [];
-        const childNodes = childElements.map(createNode);
+    const childElements = props.children || [];
+    const childNodes = childElements.map(createNode);
 
-        childNodes.map(childInstance => childInstance.mount())
-            .forEach(childDom => dom.append(...Array.isArray(childDom) ? childDom : [childDom]));
+    childNodes
+      .map(childInstance => childInstance.mount())
+      .forEach(childDom =>
+        dom.append(...(Array.isArray(childDom) ? childDom : [childDom]))
+      );
 
-        return dom;
-    }
+    return dom;
+  }
 }
 
 class CustomNode implements INode {
-    constructor(protected element: ElementDeclaration<any, ComponentConstructor<any>>) {}
+  constructor(
+    protected element: ElementDeclaration<any, ComponentConstructor<any>>
+  ) {}
 
-    mount() {
-        const { type, props } = this.element;
+  mount() {
+    const { type, props } = this.element;
 
-        const instance = new type(props);
-        const childElement = instance.render();
-        const node = createNode(childElement);
-        return node.mount();
-    }
+    const instance = new type(props);
+    const childElement = instance.render();
+    const node = createNode(childElement);
+    return node.mount();
+  }
 }
 
 class ArrayNode implements INode {
-    constructor(protected elements: DeclarationNodeArray) {}
+  constructor(protected elements: DeclarationNodeArray) {}
 
-    mount() {
-        const childNodes = this.elements.map(createNode);
-        const domList = childNodes.map(childInstance => childInstance.mount());
-        return domList.flat();
-    }
+  mount() {
+    const childNodes = this.elements.map(createNode);
+    const domList = childNodes.map(childInstance => childInstance.mount());
+    return domList.flat();
+  }
 }
 
 export function createNode(element: DeclarationNode): INode {
-    if (Array.isArray(element)) {
-        return new ArrayNode(element);
-    } else if (typeof element === "string" || typeof element === "number") {
-        return new PrimitiveNode(element);
-    } else if (typeof element.type === "string") {
-        // @ts-ignore
-        return new DomNode(element);
-    } else {
-        // @ts-ignore
-        return new CustomNode(element);
-    }
+  if (Array.isArray(element)) {
+    return new ArrayNode(element);
+  } else if (typeof element === "string" || typeof element === "number") {
+    return new PrimitiveNode(element);
+  } else if (typeof element.type === "string") {
+    // @ts-ignore
+    return new DomNode(element);
+  } else {
+    // @ts-ignore
+    return new CustomNode(element);
+  }
 }
