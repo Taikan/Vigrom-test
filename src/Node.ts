@@ -1,8 +1,5 @@
-import {ComponentConstructor, ElementDeclaration} from "./Component";
-
-interface INode {
-    mount(): Node
-}
+import {ComponentConstructor} from "./Component";
+import {ElementDeclaration, DeclarationNode, DeclarationNodeArray, INode} from "./types";
 
 class PrimitiveNode implements INode {
     protected text: string;
@@ -48,7 +45,7 @@ class DomNode implements INode {
         const childNodes = childElements.map(createNode);
 
         childNodes.map(childInstance => childInstance.mount())
-            .forEach(childDom => dom.appendChild(childDom));
+            .forEach(childDom => dom.append(...Array.isArray(childDom) ? childDom : [childDom]));
 
         return dom;
     }
@@ -67,8 +64,20 @@ class CustomNode implements INode {
     }
 }
 
-export function createNode(element: ElementDeclaration | string | number): INode {
-    if (typeof element === "string" || typeof element === "number") {
+class ArrayNode implements INode {
+    constructor(protected elements: DeclarationNodeArray) {}
+
+    mount() {
+        const childNodes = this.elements.map(createNode);
+        const domList = childNodes.map(childInstance => childInstance.mount());
+        return domList.flat();
+    }
+}
+
+export function createNode(element: DeclarationNode): INode {
+    if (Array.isArray(element)) {
+        return new ArrayNode(element);
+    } else if (typeof element === "string" || typeof element === "number") {
         return new PrimitiveNode(element);
     } else if (typeof element.type === "string") {
         // @ts-ignore

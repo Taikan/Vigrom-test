@@ -28,13 +28,16 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(js|ts)$/,
+                test: /\.(js|tsx?)$/,
                 exclude: /node_modules/,
                 use: [{
                     loader: 'cache-loader',
                 }, {
                     loader: 'babel-loader',
                     options: {
+                        plugins: [
+                            ['@babel/plugin-transform-react-jsx']
+                        ],
                         presets: [
                             '@babel/preset-env',
                             '@babel/preset-typescript'
@@ -45,6 +48,6 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions:  ['.js', '.ts'],
+        extensions:  ['.js', '.ts', '.tsx'],
     }
 };

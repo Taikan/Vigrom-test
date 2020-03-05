@@ -1,4 +1,5 @@
 import {createNode} from "./Node";
+import {ElementDeclaration} from "./types";
 
 export abstract class Component<P = any> {
     public constructor(readonly props: P) {}
@@ -7,16 +8,12 @@ export abstract class Component<P = any> {
     public renderToDom(root: HTMLElement) {
         const node = createNode(this.render());
         root.innerHTML = '';
-        root.append(node.mount());
+        const domNode = node.mount();
+        root.append(...Array.isArray(domNode) ? domNode : [domNode]);
     }
 }
 
 export  type ComponentConstructor<P> = (new (props: P) => Component<P>)
-
-export interface ElementDeclaration<P = any, T extends string | ComponentConstructor<any> = string | ComponentConstructor<any>> {
-    type: T,
-    props: P
-}
 
 export function createElement<P extends {}>(
     type: ComponentConstructor<P>  | string,

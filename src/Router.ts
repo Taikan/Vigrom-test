@@ -12,6 +12,7 @@ const locationAtom = declareAtom<Location|null>(null, on => [
 ]);
 
 export type RouteProps = {
+    history: History,
     location: Location,
     match: Match
 }
@@ -28,7 +29,7 @@ const matchPath = (pathname: string, path: string) => {
 export class Router {
     protected store: Store;
 
-    constructor(protected root: HTMLElement, history: History, protected routes: RoutesMap) {
+    constructor(protected root: HTMLElement, protected history: History, protected routes: RoutesMap) {
         const store = createStore(locationAtom);
         this.store = store;
 
@@ -36,10 +37,10 @@ export class Router {
             this.updater()
         });
 
-        history.listen(location => {
+        this.history.listen(location => {
             store.dispatch(changeLocation(location));
         });
-        store.dispatch(changeLocation(history.location));
+        store.dispatch(changeLocation(this.history.location));
     }
 
     protected updater() {
@@ -59,7 +60,7 @@ export class Router {
         });
 
         if (MatchRoute && match) {
-            const page = new MatchRoute({ location, match });
+            const page = new MatchRoute({ location, match, history: this.history });
             page.renderToDom(this.root);
         }
     }
