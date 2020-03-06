@@ -1,4 +1,4 @@
-import { Component, createElement } from "../Component";
+import View from "../View";
 import { RouteProps } from "../Router/Router";
 
 const data = {
@@ -10,9 +10,7 @@ const data = {
   total: 3
 };
 
-/** @jsx createElement */
-
-export class ItemsPage extends Component<RouteProps> {
+export class ItemsPage extends View.Component<RouteProps> {
   render() {
     return (
       <div>

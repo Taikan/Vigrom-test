@@ -5,7 +5,9 @@ export interface INode {
 }
 
 export interface ElementDeclaration<
-  P = any,
+  P extends { children?: DeclarationNodeArray } = {
+    children?: DeclarationNodeArray;
+  },
   T extends string | ComponentConstructor<any> =
     | string
     | ComponentConstructor<any>

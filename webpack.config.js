@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const isDevServer = process.env.WEBPACK_DEV_SERVER;
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
     entry: {
         app: './src/index.ts'
     },
@@ -36,7 +36,7 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         plugins: [
-                            ['@babel/plugin-transform-react-jsx']
+                            ['@babel/plugin-transform-react-jsx', { pragma: 'View.createElement' }]
                         ],
                         presets: [
                             '@babel/preset-env',

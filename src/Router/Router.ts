@@ -1,7 +1,7 @@
 import { Match } from "path-to-regexp";
 import { createStore } from "@reatom/core";
 import { Store } from "@reatom/core/build/createStore";
-import { ComponentConstructor } from "../Component";
+import { ComponentConstructor } from "../View/Component";
 import { currentPathAtom, historyAtom } from "./duck/atoms";
 import { getHashPath, matchPath } from "./utils";
 import { hashChange, historyWalk } from "./duck/effects";

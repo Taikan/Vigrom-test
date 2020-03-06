@@ -1,9 +1,7 @@
-import { Component, createElement } from "../Component";
+import View from "../View";
 import { RouteProps } from "../Router/Router";
 
-/** @jsx createElement */
-
-export class AboutPage extends Component<RouteProps> {
+export class AboutPage extends View.Component<RouteProps> {
   render() {
     return (
       <div>

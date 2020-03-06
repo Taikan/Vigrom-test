@@ -1,9 +1,7 @@
-import { Component, createElement } from "../Component";
+import View from "../View";
 import { RouteProps } from "../Router/Router";
 
-/** @jsx createElement */
-
-export class Menu extends Component<RouteProps> {
+export class Menu extends View.Component<RouteProps> {
   render() {
     return (
       <nav className="navbar navbar-expand navbar-light bg-light">

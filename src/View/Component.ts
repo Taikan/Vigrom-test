@@ -1,4 +1,4 @@
-import { createNode } from "./Node";
+import { createNode } from "./nodeBuild";
 import { ElementDeclaration } from "./types";
 
 export abstract class Component<P = any> {
