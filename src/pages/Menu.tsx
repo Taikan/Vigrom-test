@@ -14,13 +14,13 @@ export class Menu extends View.Component<RouteProps> {
                 Назад
               </button>
               <hr />
-              <ul class="list-group">
-                <li class="list-group-item">
+              <ul className="list-group">
+                <li className="list-group-item">
                   <a href="#items" className="">
                     Товары
                   </a>
                 </li>
-                <li class="list-group-item">
+                <li className="list-group-item">
                   <a href="#about" className="">
                     О нас
                   </a>

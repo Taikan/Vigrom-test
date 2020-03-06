@@ -16,7 +16,7 @@ export class PageLayout extends View.Component<Props> {
       <header className="navbar navbar-dark bg-primary ">
         <div className="container">
           <div>
-            <a href="#" className="navbar-brand">
+            <a href="#/" className="navbar-brand">
               Vigrom SPA
             </a>
           </div>

@@ -3,7 +3,7 @@ import { createStore } from "@reatom/core";
 import { connectReduxDevtools } from "@reatom/debug";
 import { Store } from "@reatom/core/build/createStore";
 import { ComponentConstructor } from "../View/Component";
-import { currentPathAtom, historyAtom } from "./duck/atoms";
+import { currentPathAtom, historyAtom, historyListAtom } from "./duck/atoms";
 import { getHashPath, matchPath } from "./utils";
 import { hashChange, historyWalk } from "./duck/effects";
 import { HistoryWalkType } from "./enums";
@@ -20,8 +20,21 @@ export type RouteConstructor<
 
 export type RoutesMap = { [path: string]: RouteConstructor };
 
+export type DebugProps = {
+  list: string[];
+  index: number;
+  path: string | null;
+  back: () => void;
+  forward: () => void;
+};
+
 export class Router {
   protected store: Store;
+
+  protected debug?: {
+    root: HTMLElement;
+    component: ComponentConstructor<DebugProps>;
+  };
 
   constructor(protected root: HTMLElement, protected routes: RoutesMap) {
     const store = createStore(historyAtom);
@@ -35,11 +48,19 @@ export class Router {
     store.subscribe(currentPathAtom, () => {
       this.updater();
     });
+    store.subscribe(historyAtom, () => {
+      this.debugRender();
+    });
 
     store.dispatch(hashChange(getHashPath()));
 
     this.back = this.back.bind(this);
     this.forward = this.forward.bind(this);
+  }
+
+  public setDebugComponent(root, component) {
+    this.debug = { root, component };
+    this.debugRender();
   }
 
   public back() {
@@ -75,6 +96,17 @@ export class Router {
         forward: this.forward
       });
       page.renderToDom(this.root);
+    }
+  }
+
+  protected debugRender() {
+    if (this.debug) {
+      const debug = new this.debug.component({
+        ...this.store.getState(historyAtom),
+        back: this.back,
+        forward: this.forward
+      });
+      debug.renderToDom(this.debug.root);
     }
   }
 }
