@@ -16,7 +16,7 @@ module.exports = {
     devServer: {
         hot: true,
     },
-    devtool: 'source-map',
+    devtool: 'cheap-module-eval-source-map',
     plugins: [
         ...!isDevServer ? [] : [
             new HtmlWebpackPlugin({

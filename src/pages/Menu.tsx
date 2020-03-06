@@ -1,5 +1,5 @@
 import { Component, createElement } from "../Component";
-import { RouteProps } from "../Router";
+import { RouteProps } from "../Router/Router";
 
 /** @jsx createElement */
 

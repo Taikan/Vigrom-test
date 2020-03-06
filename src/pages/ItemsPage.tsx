@@ -1,5 +1,5 @@
 import { Component, createElement } from "../Component";
-import { RouteProps } from "../Router";
+import { RouteProps } from "../Router/Router";
 
 const data = {
   items: [
@@ -16,10 +16,10 @@ export class ItemsPage extends Component<RouteProps> {
   render() {
     return (
       <div>
-        <button
-          className="btn btn-primary"
-          onclick={() => this.props.history.goBack()}
-        >
+        <a className="btn btn-primary" href="#">
+          Меню
+        </a>
+        <button className="btn btn-primary" onclick={this.props.back}>
           Назад
         </button>
         <div className="row">

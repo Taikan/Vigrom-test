@@ -6,8 +6,7 @@
     "dev-server": "webpack-dev-server --port 8080",
     "build": "webpack",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./src",
-    "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx ./src",
-    "prettier:write": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\""
+    "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx ./src"
   },
   "repository": {
     "type": "git",
@@ -20,7 +19,6 @@
   },
   "dependencies": {
     "@reatom/core": "^1.1.0",
-    "history": "^4.10.1",
     "path-to-regexp": "^6.1.0"
   },
   "devDependencies": {
