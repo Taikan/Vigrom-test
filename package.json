@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@reatom/core": "^1.1.0",
+    "@reatom/debug": "^1.2.0",
     "path-to-regexp": "^6.1.0"
   },
   "devDependencies": {

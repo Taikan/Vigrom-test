@@ -14,7 +14,8 @@ import {
 import { addSlash, setHashPath, replaceHashPath } from "../utils";
 import { MAX_HISTORY_LENGTH } from "../config";
 
-export const historyWalk = declareAction<HistoryWalkType>(
+export const historyWalk = declareAction<HistoryWalkType, 'historyWalk'>(
+    ['historyWalk'],
   (type, { dispatch, getState }) => {
     let newIndex = getState(historyIndexAtom);
 
@@ -33,7 +34,8 @@ export const historyWalk = declareAction<HistoryWalkType>(
   }
 );
 
-export const hashChange = declareAction<string>(
+export const hashChange = declareAction<string, 'hashChange'>(
+    ['hashChange'],
   (path, { dispatch, getState }) => {
     const normalizePath = addSlash(path);
 

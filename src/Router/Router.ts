@@ -1,5 +1,6 @@
 import { Match } from "path-to-regexp";
 import { createStore } from "@reatom/core";
+import { connectReduxDevtools } from '@reatom/debug'
 import { Store } from "@reatom/core/build/createStore";
 import { ComponentConstructor } from "../View/Component";
 import { currentPathAtom, historyAtom } from "./duck/atoms";
@@ -25,6 +26,7 @@ export class Router {
   constructor(protected root: HTMLElement, protected routes: RoutesMap) {
     const store = createStore(historyAtom);
     this.store = store;
+    connectReduxDevtools(store);
 
     window.addEventListener("hashchange", () => {
       store.dispatch(hashChange(getHashPath()));
