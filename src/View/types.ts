@@ -22,4 +22,9 @@ export type DeclarationChild = ElementDeclaration | DeclarationText;
 
 export interface DeclarationNodeArray extends Array<DeclarationNode> {}
 
-export type DeclarationNode = DeclarationChild | DeclarationNodeArray;
+export type DeclarationNode =
+  | DeclarationChild
+  | DeclarationNodeArray
+  | null
+  | false
+  | undefined;

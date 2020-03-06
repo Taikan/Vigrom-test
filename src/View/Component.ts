@@ -1,9 +1,9 @@
 import { createNode } from "./nodeBuild";
-import { ElementDeclaration } from "./types";
+import { DeclarationNode, ElementDeclaration } from "./types";
 
 export abstract class Component<P = any> {
   public constructor(readonly props: P) {}
-  abstract render(): ElementDeclaration | string | number;
+  abstract render(): DeclarationNode;
 
   public renderToDom(root: HTMLElement) {
     const node = createNode(this.render());

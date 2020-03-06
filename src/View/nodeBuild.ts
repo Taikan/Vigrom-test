@@ -9,7 +9,7 @@ import {
 class PrimitiveNode implements INode {
   protected text: string;
 
-  constructor(text: string | number) {
+  constructor(text: string | number | null | false | undefined) {
     this.text = String(text);
   }
 
@@ -51,7 +51,7 @@ class DomNode implements INode {
       });
 
     const childElements = props.children || [];
-    const childNodes = childElements.map(createNode);
+    const childNodes = childElements.filter(Boolean).map(createNode);
 
     childNodes
       .map(childInstance => childInstance.mount())
@@ -91,7 +91,11 @@ class ArrayNode implements INode {
 export function createNode(element: DeclarationNode): INode {
   if (Array.isArray(element)) {
     return new ArrayNode(element);
-  } else if (typeof element === "string" || typeof element === "number") {
+  } else if (
+    typeof element === "string" ||
+    typeof element === "number" ||
+    !element
+  ) {
     return new PrimitiveNode(element);
   } else if (typeof element.type === "string") {
     // @ts-ignore
